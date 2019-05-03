@@ -5,3 +5,4 @@ gunicorn
 django-heroku
 django-storages
 boto3
+mysqlclient
