@@ -1,4 +1,4 @@
-"""snex2 URL Configuration
+"""black_tom URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -20,5 +20,5 @@ from django.urls import include
 
 urlpatterns = [
     path('', include('tom_common.urls')),
-    path('snex2/', include('custom_code.urls'))
+    path('black_tom/', include('custom_code.urls'))
 ]

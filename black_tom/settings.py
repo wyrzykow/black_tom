@@ -69,7 +69,7 @@ MIDDLEWARE = [
      'tom_common.middleware.AuthStrategyMiddleware',
 ]
 
-ROOT_URLCONF = 'snex2.urls'
+ROOT_URLCONF = 'black_tom.urls'
 
 TEMPLATES = [
     {
@@ -89,19 +89,19 @@ TEMPLATES = [
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-WSGI_APPLICATION = 'snex2.wsgi.application'
+WSGI_APPLICATION = 'black_tom.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-if os.environ.get('SNEX2_DB_BACKEND') == 'postgres':
+if os.environ.get('black_tom_DB_BACKEND') == 'postgres':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'snex2',
-            'USER': os.environ['SNEX2_DB_USER'],
-            'PASSWORD': os.environ['SNEX2_DB_PASSWORD'],
-            'HOST': 'snex2-db',
+            'NAME': 'black_tom',
+            'USER': os.environ['black_tom_DB_USER'],
+            'PASSWORD': os.environ['black_tom_DB_PASSWORD'],
+            'HOST': 'black_tom-db',
             'PORT': 5432,
         }
     }
@@ -167,16 +167,16 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'data')
 MEDIA_URL = '/data/'
 
-# Using AWS
+# Using AWS - AMAZON account - disabling
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', '')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRECT_ACCESS_KEY', '')
-AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', '')
-AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', '')
-AWS_DEFAULT_ACL = None
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#
+#AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', '')
+#AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRECT_ACCESS_KEY', '')
+#AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', '')
+#AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', '')
+#AWS_DEFAULT_ACL = None
 
 LOGGING = {
     'version': 1,
@@ -258,7 +258,7 @@ AUTH_STRATEGY = 'LOCKED'
 
 # URLs that should be allowed access even with AUTH_STRATEGY = LOCKED
 # for example: OPEN_URLS = ['/', '/about']
-OPEN_URLS = ['/snex2/tnstargets/']
+OPEN_URLS = ['/black_tom/tnstargets/']
 
 HOOKS = {
     'target_post_save': 'custom_code.hooks.target_post_save',

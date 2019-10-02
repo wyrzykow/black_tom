@@ -4,8 +4,8 @@ ENTRYPOINT ["./run.sh"]
 
 RUN apt-get update && apt-get install -y git libpq-dev gcc gfortran libmagic-dev && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
-COPY . /snex2
+COPY . /black_tom
 
-RUN pip install numpy && pip install -r /snex2/requirements.txt
+RUN pip install numpy && pip install -r /black_tom/requirements.txt
 
-WORKDIR /snex2
+WORKDIR /black_tom

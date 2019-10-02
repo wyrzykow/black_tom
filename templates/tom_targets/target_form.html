@@ -20,7 +20,7 @@
   {% else %}
   <form action="{% url 'targets:create' %}" method="post" class="form">
   {% bootstrap_form form exclude='tweet,redshift,classification,name2,name3,epoch,pm_ra,pm_dec,galactic_lng,galactic_lat,distance,distance_err' %}
-  <p>Tweet this target out automatically on <a href="https://twitter.com/Snex2B">snex2_bot</a>? (Note: in progress, not currently functioning.)</p>
+  <p>Tweet this target out automatically on <a href="https://twitter.com/black_tomB">black_tom_bot</a>? (Note: in progress, not currently functioning.)</p>
   {% bootstrap_field form.tweet %}
   {% endif %}
   {% bootstrap_formset names_form %}
