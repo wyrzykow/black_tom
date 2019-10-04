@@ -12,12 +12,25 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import django_heroku
 
 #reads all secret settings and apis, which will not be stored in git repo
 try:
-    from black_hom.local_settings import *
+    from black_tom import local_settings as secret
 except ImportError:
     pass
+
+#this is required by Heroku, as they setup environment variables instead of using local_settings (not on github)
+# try:
+#     LCO_APIKEY = secret.LCO_APIKEY
+# except:
+#     LCO_APIKEY = os.environ['LCO_APIKEY']
+
+# try:
+#     ANTARES_KEY = secret.ANTARES_SECRET
+# except:
+#     ANTARES_SECRET = os.environ['ANTARES_SECRET']
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -224,10 +237,21 @@ EMAIL_HOST_PASSWORD = os.environ['TOMEMAILPASSWORD']
 SNEXBOT_APIKEY =  os.environ['TNSBOT_APIKEY']
 TWITTER_APIKEY = 'dupablada'
 
+#Not used:
+SECRET_KEY = 'ks#e!w3m*y1g_=)%vmrdcyn*5dt0$)o^mq2f=vtj#myw#&amp;p3%i'
+
+BROKER_CREDENTIALS = {
+    'anatares': {
+        'api_key': os.environ['ANTARES_KEY'],
+        'api_secret': os.environ['ANTARES_SECRET']
+    }
+}
+
+
 FACILITIES = {
     'LCO': {
         'portal_url': 'https://observe.lco.global',
-        'api_key': LCO_APIKEY,
+        'api_key': os.environ['LCO_APIKEY'],
     },
     'GEM': {
         'portal_url': {
@@ -327,3 +351,4 @@ DATA_TYPES = (
 HINTS_ENABLED = False
 HINT_LEVEL = 20
 
+django_heroku.settings(locals())

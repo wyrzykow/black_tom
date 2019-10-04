@@ -1,6 +1,6 @@
-ERROR_LOG_SLACK_CHANNEL = '@wyrzykowski'
+ERROR_LOG_SLACK_CHANNEL = 'UP414JK1D' #my slack id, instead of name
 
-#wyrzykowski_bright_microlensing_v2
+#wyrzykowski_bright_microlensing_v4
 
 from scipy.stats import skew
 import numpy as np
@@ -20,6 +20,11 @@ def ulens_fixedbl(t, t0, te, u0, I0):
     return I
 
 def fit_ulensfixedbl(epoch, avmag, err):
+
+    #catching short light curves:
+    if (len(epoch)<10): 
+        return [999,999,999,999], 1999999.
+
     t0=epoch[np.argmin(avmag)]
     te=50.
     u0=0.1
