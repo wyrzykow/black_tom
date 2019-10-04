@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+#reads all secret settings and apis, which will not be stored in git repo
+try:
+    from black_hom.local_settings import *
+except ImportError:
+    pass
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,8 +26,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ks#e!w3m*y1g_=)%vmrdcyn*5dt0$)o^mq2f=vtj#myw#&amp;p3%i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -223,7 +227,7 @@ TWITTER_APIKEY = 'dupablada'
 FACILITIES = {
     'LCO': {
         'portal_url': 'https://observe.lco.global',
-        'api_key': os.environ['LCO_APIKEY'],
+        'api_key': LCO_APIKEY,
     },
     'GEM': {
         'portal_url': {
@@ -323,7 +327,3 @@ DATA_TYPES = (
 HINTS_ENABLED = False
 HINT_LEVEL = 20
 
-try:
-    from local_settings import * # noqa
-except ImportError:
-    pass

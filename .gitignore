@@ -105,3 +105,4 @@ venv.bak/
 .mypy_cache/
 
 secret_stuff.txt
+black_tom/local_settings.py
