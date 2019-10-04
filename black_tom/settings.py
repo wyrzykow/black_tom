@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ks#e!w3m*y1g_=)%vmrdcyn*5dt0$)o^mq2f=vtj#myw#&amp;p3%i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'tom_observations',
     'tom_dataproducts',
     'custom_code',
+    'saveobsapp.apps.SaveobsappConfig'
 ]
 
 SITE_ID = 2
@@ -161,9 +162,21 @@ DATE_FORMAT = 'Y-m-d'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '_static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+#STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, '_static')
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+#new from stackoverflow:
+STATIC_URL = os.path.join(BASE_DIR, 'static').replace('\\','')+'/'
+# Here you can add all the directories from where you want to use your js, css etc
+STATICFILES_DIRS = [
+  # This can be same as the static url
+  os.path.join(BASE_DIR, "static"),
+]
+# This is the static root dir from where django uses the files from.
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
+
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'data')
 MEDIA_URL = '/data/'
 
@@ -196,6 +209,16 @@ LOGGING = {
 
 # TOM Specific configuration
 TARGET_TYPE = 'SIDEREAL'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ['TOMEMAIL']
+EMAIL_HOST_PASSWORD = os.environ['TOMEMAILPASSWORD']
+
+#tns harvester reads it too, but SNEXBOT api key still needed - FIX?
+SNEXBOT_APIKEY =  os.environ['TNSBOT_APIKEY']
+TWITTER_APIKEY = 'dupablada'
 
 FACILITIES = {
     'LCO': {
@@ -262,19 +285,25 @@ OPEN_URLS = ['/black_tom/tnstargets/']
 
 HOOKS = {
     'target_post_save': 'custom_code.hooks.target_post_save',
-    'observation_change_state': 'tom_common.hooks.observation_change_state'
+    'observation_change_state': 'black_tom.hooks.observation_change_state'
 }
 
 TOM_ALERT_CLASSES = [
     'custom_code.brokers.mars.CustomMARSBroker',
     'tom_alerts.brokers.lasair.LasairBroker',
+    'tom_antares.antares.AntaresBroker'
     ]
 
 TOM_FACILITY_CLASSES = [
     #'tom_observations.facilities.gemini.GEMFacility',
+    'custom_code.facilities.lco_facility.LCOFacility',
     'custom_code.facilities.gemini_facility.GeminiFacility',
     #'tom_observations.facilities.lco.LCOFacility',
-    'custom_code.facilities.lco_facility.LCOFacility',
+    'tom_gemini_community.gemini_gsselect.GEMFacility',
+    'black_tom.asvtelescope.ASVTelescope',
+    'black_tom.opticonnetwork.OpticonNetwork',
+    'black_tom.lcomultifilter.LCOMultiFilterFacility',
+#    'tom_lt.lt.LTFacility',
     ]
 
 TOM_HARVESTER_CLASSES = [
