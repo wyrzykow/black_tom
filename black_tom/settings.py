@@ -21,15 +21,15 @@ except ImportError:
     pass
 
 #this is required by Heroku, as they setup environment variables instead of using local_settings (not on github)
-# try:
-#     LCO_APIKEY = secret.LCO_APIKEY
-# except:
-#     LCO_APIKEY = os.environ['LCO_APIKEY']
+try:
+    LCO_APIKEY = secret.LCO_APIKEY
+except:
+    LCO_APIKEY = os.environ['LCO_APIKEY']
 
-# try:
-#     ANTARES_KEY = secret.ANTARES_SECRET
-# except:
-#     ANTARES_SECRET = os.environ['ANTARES_SECRET']
+try:
+    ANTARES_KEY = secret.ANTARES_SECRET
+except:
+    ANTARES_SECRET = os.environ['ANTARES_SECRET']
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -242,8 +242,8 @@ SECRET_KEY = 'ks#e!w3m*y1g_=)%vmrdcyn*5dt0$)o^mq2f=vtj#myw#&amp;p3%i'
 
 BROKER_CREDENTIALS = {
     'anatares': {
-        'api_key': os.environ['ANTARES_KEY'],
-        'api_secret': os.environ['ANTARES_SECRET']
+        'api_key': ANTARES_KEY,
+        'api_secret': ANTARES_SECRET
     }
 }
 
@@ -251,7 +251,7 @@ BROKER_CREDENTIALS = {
 FACILITIES = {
     'LCO': {
         'portal_url': 'https://observe.lco.global',
-        'api_key': os.environ['LCO_APIKEY'],
+        'api_key': LCO_APIKEY,
     },
     'GEM': {
         'portal_url': {
