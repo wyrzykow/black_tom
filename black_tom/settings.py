@@ -243,7 +243,7 @@ TWITTER_APIKEY = 'dupablada'
 SECRET_KEY = 'ks#e!w3m*y1g_=)%vmrdcyn*5dt0$)o^mq2f=vtj#myw#&amp;p3%i'
 
 BROKER_CREDENTIALS = {
-    'anatares': {
+    'antares': {
         'api_key': ANTARES_KEY,
         'api_secret': ANTARES_SECRET
     }
