@@ -9,3 +9,6 @@ astropy==3.2.1
 astroplan
 requests_oauthlib
 python-magic
+tom-antares
+tom-gemini-community
+tom-lt
