@@ -27,8 +27,10 @@ except:
     LCO_APIKEY = os.environ['LCO_APIKEY']
 
 try:
-    ANTARES_KEY = secret.ANTARES_SECRET
+    ANTARES_KEY = secret.ANTARES_KEY
+    ANTARES_SECRET = secret.ANTARES_SECRET
 except:
+    ANTARES_KEY = os.environ['ANTARES_KEY']
     ANTARES_SECRET = os.environ['ANTARES_SECRET']
 
 
