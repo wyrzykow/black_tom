@@ -12,3 +12,4 @@ python-magic
 tom-antares
 tom-gemini-community
 tom-lt
+python-dateutil==2.8.0
