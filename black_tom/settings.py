@@ -37,6 +37,9 @@ try:
     TOMEMAIL = secret.TOMEMAIL
     TOMEMAILPASSWORD = secret.TOMEMAILPASSWORD
     SNEXBOT_APIKEY =  secret.TNSBOT_APIKEY
+    black_tom_DB_USER = secret.black_tom_DB_USER 
+    black_tom_DB_PASSWORD = secret.black_tom_DB_PASSWORD 
+
 except:
     SECRET_KEY = os.environ['SECRET_KEY']
     ANTARES_KEY = os.environ['ANTARES_KEY']
@@ -49,7 +52,8 @@ except:
     TOMEMAILPASSWORD = os.environ['TOMEMAILPASSWORD']
     #tns harvester reads it too, but SNEXBOT api key still needed - FIX?
     SNEXBOT_APIKEY =  os.environ['TNSBOT_APIKEY']
-
+    black_tom_DB_USER = os.environ['black_tom_DB_USER']
+    black_tom_DB_PASSWORD = os.environ['black_tom_DB_PASSWORD']
 
 
 
@@ -130,18 +134,18 @@ TEMPLATES = [
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 WSGI_APPLICATION = 'black_tom.wsgi.application'
-
+black_tom_DB_BACKEND = 'postgres'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-if os.environ.get('black_tom_DB_BACKEND') == 'postgres':
+if black_tom_DB_BACKEND == 'postgres':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'black_tom',
-            'USER': os.environ['black_tom_DB_USER'],
-            'PASSWORD': os.environ['black_tom_DB_PASSWORD'],
-            'HOST': 'black_tom-db',
+            'NAME': 'blacktom',
+            'USER': black_tom_DB_USER,
+            'PASSWORD': black_tom_DB_PASSWORD,
+            'HOST': 'localhost',
             'PORT': 5432,
         }
     }
@@ -363,7 +367,8 @@ DATA_TYPES = (
     ('PHOTOMETRY', 'Photometry')
 )
 
-HINTS_ENABLED = False
+HINTS_ENABLED = True
 HINT_LEVEL = 20
 
-django_heroku.settings(locals())
+#HEROKU failed deployment:
+#django_heroku.settings(locals())
