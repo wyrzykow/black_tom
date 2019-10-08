@@ -32,14 +32,33 @@ def target_post_save(target, created):
  
   logger.info('Target post save hook: %s created: %s', target, created)
 
+  ### how to pass those variables from settings?
+  try:
+      from black_tom import local_settings as secret
+  except ImportError:
+      pass
+  try:
+      TWITTER_APIKEY = secret.TWITTER_APIKEY
+      TWITTER_SECRET = secret.TWITTER_SECRET
+      TWITTER_ACCESSTOKEN = secret.TWITTER_ACCESSTOKEN
+      TWITTER_ACCESSSECRET = secret.TWITTER_ACCESSSECRET
+      CPCS_DATA_ACCESS_HASHTAG = secret.CPCS_DATA_ACCESS_HASHTAG
+  except:
+      TWITTER_APIKEY = os.environ['TWITTER_APIKEY']
+      TWITTER_SECRET = os.environ['TWITTER_SECRET']
+      TWITTER_ACCESSTOKEN = os.environ['TWITTER_ACCESSTOKEN']
+      TWITTER_ACCESSSECRET = os.environ['TWITTER_ACCESSSECRET']
+      CPCS_DATA_ACCESS_HASHTAG = os.environ['CPCS_DATA_ACCESS_HASHTAG']
+
+  ####
   if target_extra_field(target=target, name='tweet'):
     #Post to Twitter!
     twitter_url = 'https://api.twitter.com/1.1/statuses/update.json'
 
-    api_key = os.environ['TWITTER_APIKEY']
-    api_secret = os.environ['TWITTER_SECRET']
-    access_token = os.environ['TWITTER_ACCESSTOKEN']
-    access_secret = os.environ['TWITTER_ACCESSSECRET']
+    api_key = TWITTER_APIKEY
+    api_secret = TWITTER_SECRET
+    access_token = TWITTER_ACCESSTOKEN
+    access_secret = TWITTER_ACCESSSECRET
     auth = OAuth1(api_key, api_secret, access_token, access_secret)
 
     coords = SkyCoord(target.ra, target.dec, unit=u.deg)
@@ -117,7 +136,7 @@ def target_post_save(target, created):
     req=br.click_link(text='Login')
     br.open(req)
     br.select_form(nr=0)
-    br.form['hashtag']=os.environ['CPCS_DATA_ACCESS_HASHTAG']
+    br.form['hashtag']=CPCS_DATA_ACCESS_HASHTAG
     br.submit()
     page=br.open('http://gsaweb.ast.cam.ac.uk/followup/get_alert_lc_data?alert_name=ivo:%%2F%%2F%s'%nam)
     pagetext=page.read()
