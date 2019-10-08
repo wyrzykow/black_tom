@@ -31,6 +31,7 @@ class Migration(migrations.Migration):
                 ('disc_filter', models.CharField(blank=True, default='', help_text='Discovery filter', max_length=100, null=True, verbose_name='Discovery filter')),
                 ('all_phot', models.TextField(blank=True, help_text='All photometry', null=True, verbose_name='All photometry')),
                 ('TESS_sectors', models.CharField(blank=True, default='', help_text='TESS sectors the object is in.', max_length=255, null=True, verbose_name='TESS Sectors')),
+
             ],
             options={
                 'ordering': ('id',),

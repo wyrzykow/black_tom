@@ -79,9 +79,11 @@ def target_post_save(target, created):
     alerts = get(ztf_name)
     
     filters = {1: 'g_ZTF', 2: 'r_ZTF', 3: 'i_ZTF'}
+    jdarr = []
     for alert in alerts:
         if all([key in alert['candidate'] for key in ['jd', 'magpsf', 'fid', 'sigmapsf']]):
             jd = Time(alert['candidate']['jd'], format='jd', scale='utc')
+            jdarr.append(jd)
             jd.to_datetime(timezone=TimezoneInfo())
             value = {
                 'magnitude': alert['candidate']['magpsf'],
@@ -97,6 +99,21 @@ def target_post_save(target, created):
                 target=target)
             rd.save()
 
+    jdlast = np.array(jdarr).max()
+
+    #modifying jd of last obs
+    previousjd = target_extra_field(target=target, name='jdlastobs') 
+    if (previousjd is not None):
+      jj = float(previousjd)
+      print("DEBUG-ZTF prev= ", jj, " new= ",jdlast)
+      if (jj<jdlast) :
+        print("DEBUG-ZTF saving new jdlast.")
+        try:
+          target.save(extras={'jdlastobs': jdlast})
+        except:
+          print("FAILED save jdlastobs (ZTF)")
+
+
   gaia_name = next((name for name in target.names if 'Gaia' in name), None)
   if gaia_name:
     base_url = 'http://gsaweb.ast.cam.ac.uk/alerts/alert'
@@ -107,6 +124,19 @@ def target_post_save(target, created):
 
     jd = [x.split(',')[1] for x in data]
     mag = [x.split(',')[2] for x in data]
+
+    jdlast = np.max(np.array(jd).astype(np.float))
+    previousjd = target_extra_field(target=target, name='jdlastobs') 
+    if (previousjd is not None):
+      jj = float(previousjd)
+      print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
+      if (jj<jdlast) :
+        print("DEBUG saving new jdlast.")
+        try:
+          target.save(extras={'jdlastobs': jdlast})
+        except:
+          print("FAILED save jdlastobs")
+
 
     for i in reversed(range(len(mag))):
         try:
@@ -166,6 +196,18 @@ def target_post_save(target, created):
     filter=filter0[w]
     obs=obs0[w]
 
+    #Updating the last observation JD
+    jdlast = np.max(jd)
+    previousjd = target_extra_field(target=target, name='jdlastobs') 
+    if (previousjd is not None):
+      jj = float(previousjd)
+      print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
+      if (jj<jdlast) :
+        print("DEBUG-CPCS saving new jdlast.")
+        try:
+          target.save(extras={'jdlastobs': jdlast})
+        except:
+          print("FAILED save jdlastobs (CPCS)")
 
     for i in reversed(range(len(mag))):
         try:

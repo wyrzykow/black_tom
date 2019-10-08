@@ -65,6 +65,11 @@ class TNSTarget(models.Model):
         max_length=255, default='', verbose_name='TESS Sectors', help_text='TESS sectors the object is in.',
         blank=True, null=True
     )
+    jdlastobs = models.FloatField(
+        verbose_name='JD last observation', help_text='JD of the last datapoint',
+        blank=True, null=True
+    )
+
 
     class Meta:
         ordering = ('-id',)

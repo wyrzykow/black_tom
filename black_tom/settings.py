@@ -315,10 +315,12 @@ FACILITIES = {
 #     {'name': 'eligible', 'type': 'boolean'},
 #     {'name': 'dicovery_date', 'type': 'datetime'}
 # ]
+#THESE are for TOM TARGET and the extra fields are stored in a separate table tom_targets_targetextra
 EXTRA_FIELDS = [
     {'name': 'redshift', 'type': 'number'},
     {'name': 'classification', 'type': 'string'},
     {'name': 'tweet', 'type': 'boolean'},
+    {'name': 'jdlastobs', 'type': 'number'},
 ]
 
 # Authentication strategy can either be LOCKED (required login for all views)

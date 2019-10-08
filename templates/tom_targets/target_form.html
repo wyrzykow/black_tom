@@ -19,7 +19,7 @@
   {% bootstrap_form form exclude='tweet,epoch,pm_ra,pm_dec,galactic_lng,galactic_lat,distance,distance_err' %}
   {% else %}
   <form action="{% url 'targets:create' %}" method="post" class="form">
-  {% bootstrap_form form exclude='tweet,redshift,classification,name2,name3,epoch,pm_ra,pm_dec,galactic_lng,galactic_lat,distance,distance_err' %}
+  {% bootstrap_form form exclude='tweet,redshift,classification,name2,name3,epoch,pm_ra,pm_dec,galactic_lng,galactic_lat,distance,distance_err,jdlastobs' %}
   <p>Tweet this target out automatically on <a href="https://twitter.com/black_tomB">black_tom_bot</a>? (Note: in progress, not currently functioning.)</p>
   {% bootstrap_field form.tweet %}
   {% endif %}
