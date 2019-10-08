@@ -106,7 +106,7 @@ def target_post_save(target, created):
     if (previousjd is not None):
       jj = float(previousjd)
     else:
-      previousjd=0.0
+      jj=0.0
     print("DEBUG-ZTF prev= ", jj, " new= ",jdlast)
     if (jj<jdlast) :
         print("DEBUG saving new jdlast.")
@@ -132,7 +132,7 @@ def target_post_save(target, created):
     if (previousjd is not None):
       jj = float(previousjd)
     else:
-      previousjd=0.0
+      jj=0.0
     print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
     if (jj<jdlast) :
         print("DEBUG saving new jdlast.")
@@ -206,7 +206,7 @@ def target_post_save(target, created):
     if (previousjd is not None):
       jj = float(previousjd)
     else:
-      previousjd=0.0
+      jj=0.0
     print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
     if (jj<jdlast) :
         print("DEBUG saving new jdlast.")
