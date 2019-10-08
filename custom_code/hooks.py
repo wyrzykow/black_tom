@@ -10,6 +10,7 @@ from astropy.coordinates import SkyCoord
 from astropy import units as u
 import mechanize
 import numpy as np
+from tom_targets.models import TargetExtra
 
 logger = logging.getLogger(__name__)
 
@@ -102,18 +103,21 @@ def target_post_save(target, created):
     jdlast = np.array(jdarr).max()
 
     #modifying jd of last obs
-    previousjd = target_extra_field(target=target, name='jdlastobs') 
-    if (previousjd is not None):
-      jj = float(previousjd)
+    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')[0]
+    
+    if (previousjd_object.value is not None):
+      jj = float(previousjd_object.value)
     else:
       jj=0.0
     print("DEBUG-ZTF prev= ", jj, " new= ",jdlast)
     if (jj<jdlast) :
         print("DEBUG saving new jdlast.")
         try:
-          target.save(extras={'jdlastobs': jdlast})
+          previousjd_object.value = jdlast
+          previousjd_object.save()
         except:
           print("FAILED save jdlastobs")
+
 
 
   gaia_name = next((name for name in target.names if 'Gaia' in name), None)
@@ -126,21 +130,6 @@ def target_post_save(target, created):
 
     jd = [x.split(',')[1] for x in data]
     mag = [x.split(',')[2] for x in data]
-
-    jdlast = np.max(np.array(jd).astype(np.float))
-    previousjd = target_extra_field(target=target, name='jdlastobs') 
-    if (previousjd is not None):
-      jj = float(previousjd)
-    else:
-      jj=0.0
-    print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
-    if (jj<jdlast) :
-        print("DEBUG saving new jdlast.")
-        try:
-          target.save(extras={'jdlastobs': jdlast})
-        except:
-          print("FAILED save jdlastobs")
-
 
     for i in reversed(range(len(mag))):
         try:
@@ -162,6 +151,24 @@ def target_post_save(target, created):
         except:
             pass
 
+    #Updating/storing the last JD
+    jdlast = np.max(np.array(jd).astype(np.float))
+    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')[0]
+    
+    if (previousjd_object.value is not None):
+      jj = float(previousjd_object.value)
+    else:
+      jj=0.0
+    print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
+    if (jj<jdlast) :
+        print("DEBUG saving new jdlast.")
+        try:
+          previousjd_object.value = jdlast
+          previousjd_object.save()
+        except:
+          print("FAILED save jdlastobs")
+
+############## CPCS follow-up server
   cpcs_name = next((name for name in target.names if 'ivo://' in name), None)
   if cpcs_name:
     nam = cpcs_name[6:] #removing ivo://
@@ -200,21 +207,6 @@ def target_post_save(target, created):
     filter=filter0[w]
     obs=obs0[w]
 
-    #Updating the last observation JD
-    jdlast = np.max(jd)
-    previousjd = target_extra_field(target=target, name='jdlastobs') 
-    if (previousjd is not None):
-      jj = float(previousjd)
-    else:
-      jj=0.0
-    print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
-    if (jj<jdlast) :
-        print("DEBUG saving new jdlast.")
-        try:
-          target.save(extras={'jdlastobs': jdlast})
-        except:
-          print("FAILED save jdlastobs")
-
     for i in reversed(range(len(mag))):
         try:
             datum_mag = float(mag[i])
@@ -236,3 +228,22 @@ def target_post_save(target, created):
             rd.save()
         except:
             pass
+    
+    #Updating the last observation JD
+    jdlast = np.max(jd)
+    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')[0]
+    
+    if (previousjd_object.value is not None):
+      jj = float(previousjd_object.value)
+    else:
+      jj=0.0
+    print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
+    if (jj<jdlast) :
+        print("DEBUG saving new jdlast ", jdlast)
+        try:
+          previousjd_object.value = jdlast
+          previousjd_object.save()
+          print("DEBUG-cpcs: saved ",jdlast)
+        except:
+          print("FAILED save jdlastobs")
+
