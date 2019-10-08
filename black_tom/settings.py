@@ -27,14 +27,21 @@ except:
     LCO_APIKEY = os.environ['LCO_APIKEY']
 
 try:
+    SECRET_KEY = secret.SECRET_KEY
     ANTARES_KEY = secret.ANTARES_KEY
     ANTARES_SECRET = secret.ANTARES_SECRET
     TWITTER_APIKEY = secret.TWITTER_APIKEY
+    TWITTER_SECRET = secret.TWITTER_SECRET
+    TWITTER_ACCESSTOKEN = secret.TWITTER_ACCESSTOKEN
+    TWITTER_ACCESSSECRET = secret.TWITTER_ACCESSSECRET
 except:
+    SECRET_KEY = os.environ['SECRET_KEY']
     ANTARES_KEY = os.environ['ANTARES_KEY']
     ANTARES_SECRET = os.environ['ANTARES_SECRET']
     TWITTER_APIKEY = os.environ['TWITTER_APIKEY']
-
+    TWITTER_SECRET = os.environ['TWITTER_SECRET']
+    TWITTER_ACCESSTOKEN = os.environ['TWITTER_ACCESSTOKEN']
+    TWITTER_ACCESSSECRET = os.environ['TWITTER_ACCESSSECRET']
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
