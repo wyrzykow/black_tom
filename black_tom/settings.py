@@ -69,7 +69,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = True
 
 #visata.astrouw.edu.pl: 193.0.88.218
-ALLOWED_HOSTS = ['193.0.88.218']
+ALLOWED_HOSTS = ['visata.astrouw.edu.pl']
 
 
 # Application definition
