@@ -29,9 +29,12 @@ except:
 try:
     ANTARES_KEY = secret.ANTARES_KEY
     ANTARES_SECRET = secret.ANTARES_SECRET
+    TWITTER_APIKEY = secret.TWITTER_APIKEY
 except:
     ANTARES_KEY = os.environ['ANTARES_KEY']
     ANTARES_SECRET = os.environ['ANTARES_SECRET']
+    TWITTER_APIKEY = os.environ['TWITTER_APIKEY']
+
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -237,10 +240,8 @@ EMAIL_HOST_PASSWORD = os.environ['TOMEMAILPASSWORD']
 
 #tns harvester reads it too, but SNEXBOT api key still needed - FIX?
 SNEXBOT_APIKEY =  os.environ['TNSBOT_APIKEY']
-TWITTER_APIKEY = 'dupablada'
+TWITTER_APIKEY = os.environ['TWITTER_APIKEY']
 
-#Not used:
-SECRET_KEY = 'ks#e!w3m*y1g_=)%vmrdcyn*5dt0$)o^mq2f=vtj#myw#&amp;p3%i'
 
 BROKER_CREDENTIALS = {
     'antares': {
