@@ -127,6 +127,7 @@ def target_post_save(target, created):
 
     jdlast = np.max(np.array(jd).astype(np.float))
     previousjd = target_extra_field(target=target, name='jdlastobs') 
+    print("DEBUG: previousjd= ",previousjd)
     if (previousjd is not None):
       jj = float(previousjd)
       print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
