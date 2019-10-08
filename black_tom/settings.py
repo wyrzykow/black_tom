@@ -34,6 +34,8 @@ try:
     TWITTER_SECRET = secret.TWITTER_SECRET
     TWITTER_ACCESSTOKEN = secret.TWITTER_ACCESSTOKEN
     TWITTER_ACCESSSECRET = secret.TWITTER_ACCESSSECRET
+    TOMEMAIL = secret.TOMEMAIL
+    TOMEMAILPASSWORD = secret.TOMEMAILPASSWORD
 except:
     SECRET_KEY = os.environ['SECRET_KEY']
     ANTARES_KEY = os.environ['ANTARES_KEY']
@@ -42,6 +44,8 @@ except:
     TWITTER_SECRET = os.environ['TWITTER_SECRET']
     TWITTER_ACCESSTOKEN = os.environ['TWITTER_ACCESSTOKEN']
     TWITTER_ACCESSSECRET = os.environ['TWITTER_ACCESSSECRET']
+    TOMEMAIL = os.environ['TOMEMAIL']
+    TOMEMAILPASSWORD = os.environ['TOMEMAILPASSWORD']
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
