@@ -95,7 +95,7 @@ INSTALLED_APPS = [
     'saveobsapp.apps.SaveobsappConfig'
 ]
 #should match the id of the site, defined in admin/sites
-SITE_ID = 1
+SITE_ID = 3
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
