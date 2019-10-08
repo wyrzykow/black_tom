@@ -36,6 +36,7 @@ try:
     TWITTER_ACCESSSECRET = secret.TWITTER_ACCESSSECRET
     TOMEMAIL = secret.TOMEMAIL
     TOMEMAILPASSWORD = secret.TOMEMAILPASSWORD
+    SNEXBOT_APIKEY =  secret.TNSBOT_APIKEY
 except:
     SECRET_KEY = os.environ['SECRET_KEY']
     ANTARES_KEY = os.environ['ANTARES_KEY']
@@ -46,6 +47,10 @@ except:
     TWITTER_ACCESSSECRET = os.environ['TWITTER_ACCESSSECRET']
     TOMEMAIL = os.environ['TOMEMAIL']
     TOMEMAILPASSWORD = os.environ['TOMEMAILPASSWORD']
+    #tns harvester reads it too, but SNEXBOT api key still needed - FIX?
+    SNEXBOT_APIKEY =  os.environ['TNSBOT_APIKEY']
+
+
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -246,12 +251,7 @@ TARGET_TYPE = 'SIDEREAL'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ['TOMEMAIL']
-EMAIL_HOST_PASSWORD = os.environ['TOMEMAILPASSWORD']
 
-#tns harvester reads it too, but SNEXBOT api key still needed - FIX?
-SNEXBOT_APIKEY =  os.environ['TNSBOT_APIKEY']
-TWITTER_APIKEY = os.environ['TWITTER_APIKEY']
 
 
 BROKER_CREDENTIALS = {

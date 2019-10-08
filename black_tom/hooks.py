@@ -20,3 +20,4 @@ def observation_change_state(observation, previous_status):
             ['wyrzykow@gmail.com'],
             fail_silently=False,
         )
+
