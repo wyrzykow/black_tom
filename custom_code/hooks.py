@@ -105,13 +105,15 @@ def target_post_save(target, created):
     previousjd = target_extra_field(target=target, name='jdlastobs') 
     if (previousjd is not None):
       jj = float(previousjd)
-      print("DEBUG-ZTF prev= ", jj, " new= ",jdlast)
-      if (jj<jdlast) :
-        print("DEBUG-ZTF saving new jdlast.")
+    else:
+      previousjd=0.0
+    print("DEBUG-ZTF prev= ", jj, " new= ",jdlast)
+    if (jj<jdlast) :
+        print("DEBUG saving new jdlast.")
         try:
           target.save(extras={'jdlastobs': jdlast})
         except:
-          print("FAILED save jdlastobs (ZTF)")
+          print("FAILED save jdlastobs")
 
 
   gaia_name = next((name for name in target.names if 'Gaia' in name), None)
@@ -127,11 +129,12 @@ def target_post_save(target, created):
 
     jdlast = np.max(np.array(jd).astype(np.float))
     previousjd = target_extra_field(target=target, name='jdlastobs') 
-    print("DEBUG: previousjd= ",previousjd)
     if (previousjd is not None):
       jj = float(previousjd)
-      print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
-      if (jj<jdlast) :
+    else:
+      previousjd=0.0
+    print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
+    if (jj<jdlast) :
         print("DEBUG saving new jdlast.")
         try:
           target.save(extras={'jdlastobs': jdlast})
@@ -202,13 +205,15 @@ def target_post_save(target, created):
     previousjd = target_extra_field(target=target, name='jdlastobs') 
     if (previousjd is not None):
       jj = float(previousjd)
-      print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
-      if (jj<jdlast) :
-        print("DEBUG-CPCS saving new jdlast.")
+    else:
+      previousjd=0.0
+    print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
+    if (jj<jdlast) :
+        print("DEBUG saving new jdlast.")
         try:
           target.save(extras={'jdlastobs': jdlast})
         except:
-          print("FAILED save jdlastobs (CPCS)")
+          print("FAILED save jdlastobs")
 
     for i in reversed(range(len(mag))):
         try:
