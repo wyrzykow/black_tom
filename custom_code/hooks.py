@@ -64,15 +64,15 @@ def target_post_save(target, created):
     coords = SkyCoord(target.ra, target.dec, unit=u.deg)
     coords = coords.to_string('hmsdms', sep=':',precision=1,alwayssign=True)
 
-    #Explosion emoji
-    tweet = ''.join([u'\U0001F4A5 New target alert! \U0001F4A5\n',
-        'Name: {name}\n'.format(name=target.name),
-        'Coordinates: {coords}\n'.format(coords=coords)])
-    status = {
-            'status': tweet
-    }
+    # #Explosion emoji
+    # tweet = ''.join([u'\U0001F4A5 New target alert! \U0001F4A5\n',
+    #     'Name: {name}\n'.format(name=target.name),
+    #     'Coordinates: {coords}\n'.format(coords=coords)])
+    # status = {
+    #         'status': tweet
+    # }
 
-    response = requests.post(twitter_url, params=status, auth=auth)
+    # response = requests.post(twitter_url, params=status, auth=auth)
  
   ztf_name = next((name for name in target.names if 'ZTF' in name), None)
   if ztf_name:
