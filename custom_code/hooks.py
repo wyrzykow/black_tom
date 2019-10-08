@@ -8,6 +8,8 @@ from tom_targets.templatetags.targets_extras import target_extra_field
 from requests_oauthlib import OAuth1
 from astropy.coordinates import SkyCoord
 from astropy import units as u
+import mechanize
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -101,6 +103,67 @@ def target_post_save(target, created):
                 value=json.dumps(value),
                 source_name=target.name,
                 source_location=lightcurve_url,
+                data_type='photometry',
+                target=target)
+            rd.save()
+        except:
+            pass
+
+  cpcs_name = next((name for name in target.names if 'ivo://' in name), None)
+  if cpcs_name:
+    nam = cpcs_name[6:] #removing ivo://
+    br = mechanize.Browser()
+    followuppage=br.open('http://gsaweb.ast.cam.ac.uk/followup/')
+    req=br.click_link(text='Login')
+    br.open(req)
+    br.select_form(nr=0)
+    br.form['hashtag']=os.environ['CPCS_DATA_ACCESS_HASHTAG']
+    br.submit()
+    page=br.open('http://gsaweb.ast.cam.ac.uk/followup/get_alert_lc_data?alert_name=ivo:%%2F%%2F%s'%nam)
+    pagetext=page.read()
+    data1=json.loads(pagetext)
+    if len(set(data1["filter"]) & set(['u','B','g','V','B2pg','r','R','R1pg','i','I','Ipg','z']))>0:
+        fup=[data1["mjd"],data1["mag"],data1["magerr"],data1["filter"],data1["observatory"]] 
+        logger.info('%s: follow-up data on CPCS found', target)
+    else:
+        logger.info('DEBUG: no CPCS follow-up for %s', target)
+        pass
+
+
+    ## ascii for single filter:
+    datajson = data1
+
+    mjd0=np.array(datajson['mjd'])
+    mag0=np.array(datajson['mag'])
+    magerr0=np.array(datajson['magerr'])
+    filter0=np.array(datajson['filter'])
+    caliberr0=np.array(datajson['caliberr'])
+    obs0 = np.array(datajson['observatory'])
+    w=np.where((magerr0 != -1))
+
+    jd=mjd0[w]+2400000.5
+    mag=mag0[w]
+    magerr=np.sqrt(magerr0[w]*magerr0[w] + caliberr0[w]*caliberr0[w]) #adding calibration err in quad
+    filter=filter0[w]
+    obs=obs0[w]
+
+
+    for i in reversed(range(len(mag))):
+        try:
+            datum_mag = float(mag[i])
+            datum_jd = Time(float(jd[i]), format='jd', scale='utc')
+            datum_f = filter[i]
+            datum_err = float(magerr[i])
+            value = {
+                'magnitude': datum_mag,
+                'filter': datum_f,
+                'error': datum_err
+            }
+            rd, created = ReducedDatum.objects.get_or_create(
+                timestamp=datum_jd.to_datetime(timezone=TimezoneInfo()),
+                value=json.dumps(value),
+                source_name=target.name,
+                source_location=page,
                 data_type='photometry',
                 target=target)
             rd.save()

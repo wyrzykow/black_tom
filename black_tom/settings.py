@@ -21,12 +21,9 @@ except ImportError:
     pass
 
 #this is required by Heroku, as they setup environment variables instead of using local_settings (not on github)
-try:
-    LCO_APIKEY = secret.LCO_APIKEY
-except:
-    LCO_APIKEY = os.environ['LCO_APIKEY']
 
 try:
+    LCO_APIKEY = secret.LCO_APIKEY
     SECRET_KEY = secret.SECRET_KEY
     ANTARES_KEY = secret.ANTARES_KEY
     ANTARES_SECRET = secret.ANTARES_SECRET
@@ -39,8 +36,9 @@ try:
     SNEXBOT_APIKEY =  secret.TNSBOT_APIKEY
     black_tom_DB_USER = secret.black_tom_DB_USER 
     black_tom_DB_PASSWORD = secret.black_tom_DB_PASSWORD 
-
+    CPCS_DATA_ACCESS_HASHTAG = secret.CPCS_DATA_ACCESS_HASHTAG
 except:
+    LCO_APIKEY = os.environ['LCO_APIKEY']
     SECRET_KEY = os.environ['SECRET_KEY']
     ANTARES_KEY = os.environ['ANTARES_KEY']
     ANTARES_SECRET = os.environ['ANTARES_SECRET']
@@ -54,7 +52,7 @@ except:
     SNEXBOT_APIKEY =  os.environ['TNSBOT_APIKEY']
     black_tom_DB_USER = os.environ['black_tom_DB_USER']
     black_tom_DB_PASSWORD = os.environ['black_tom_DB_PASSWORD']
-
+    CPCS_DATA_ACCESS_HASHTAG = os.environ['CPCS_DATA_ACCESS_HASHTAG']
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -69,7 +67,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = True
 
 #visata.astrouw.edu.pl: 193.0.88.218
-ALLOWED_HOSTS = ['visata.astrouw.edu.pl']
+#ALLOWED_HOSTS = ['visata.astrouw.edu.pl']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
