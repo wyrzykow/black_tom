@@ -64,7 +64,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+#visata.astrouw.edu.pl: 193.0.88.218
+ALLOWED_HOSTS = ['193.0.88.218']
 
 
 # Application definition
@@ -93,8 +94,8 @@ INSTALLED_APPS = [
     'custom_code',
     'saveobsapp.apps.SaveobsappConfig'
 ]
-
-SITE_ID = 2
+#should match the id of the site, defined in admin/sites
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
