@@ -84,7 +84,7 @@ def target_post_save(target, created):
     for alert in alerts:
         if all([key in alert['candidate'] for key in ['jd', 'magpsf', 'fid', 'sigmapsf']]):
             jd = Time(alert['candidate']['jd'], format='jd', scale='utc')
-            jdarr.append(jd)
+            jdarr.append(jd.jd)
             jd.to_datetime(timezone=TimezoneInfo())
             value = {
                 'magnitude': alert['candidate']['magpsf'],
@@ -102,21 +102,23 @@ def target_post_save(target, created):
 
     jdlast = np.array(jdarr).max()
 
-    #modifying jd of last obs
-    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')[0]
-    
-    if (previousjd_object.value is not None):
-      jj = float(previousjd_object.value)
-    else:
-      jj=0.0
-    print("DEBUG-ZTF prev= ", jj, " new= ",jdlast)
-    if (jj<jdlast) :
+    #modifying jd of last obs 
+    #problems during Create - this object is empty...
+    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')
+
+    #this is a list, with one element if ok
+    #FIXME: this works only for update, but not for creation
+    if (len(previousjd_object)>0):
+      pp = previousjd_object[0]
+      jj = float(pp.value)
+      print("DEBUG-ZTF prev= ", jj, " new= ",jdlast)
+      if (jj<jdlast) :
         print("DEBUG saving new jdlast.")
         try:
-          previousjd_object.value = jdlast
-          previousjd_object.save()
+          pp.value = jdlast
+          pp.save()
         except:
-          print("FAILED save jdlastobs")
+          print("FAILED save jdlastobs (ZTF)")
 
 
 
@@ -153,20 +155,23 @@ def target_post_save(target, created):
 
     #Updating/storing the last JD
     jdlast = np.max(np.array(jd).astype(np.float))
-    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')[0]
     
-    if (previousjd_object.value is not None):
-      jj = float(previousjd_object.value)
-    else:
-      jj=0.0
-    print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
-    if (jj<jdlast) :
+    #problems during Create - this object is empty...
+    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')
+
+    #this is a list, with one element if ok
+    #FIXME: this works only for update, but not for creation
+    if (len(previousjd_object)>0):
+      pp = previousjd_object[0]
+      jj = float(pp.value)
+      print("DEBUG-Gaia prev= ", jj, " new= ",jdlast)
+      if (jj<jdlast) :
         print("DEBUG saving new jdlast.")
         try:
-          previousjd_object.value = jdlast
-          previousjd_object.save()
+          pp.value = jdlast
+          pp.save()
         except:
-          print("FAILED save jdlastobs")
+          print("FAILED save jdlastobs (Gaia)")
 
 ############## CPCS follow-up server
   cpcs_name = next((name for name in target.names if 'ivo://' in name), None)
@@ -231,19 +236,21 @@ def target_post_save(target, created):
     
     #Updating the last observation JD
     jdlast = np.max(jd)
-    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')[0]
-    
-    if (previousjd_object.value is not None):
-      jj = float(previousjd_object.value)
-    else:
-      jj=0.0
-    print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
-    if (jj<jdlast) :
-        print("DEBUG saving new jdlast ", jdlast)
+
+    #problems during Create - this object is empty...
+    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')
+
+    #this is a list, with one element if ok
+    #FIXME: this works only for update, but not for creation
+    if (len(previousjd_object)>0):
+      pp = previousjd_object[0]
+      jj = float(pp.value)
+      print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
+      if (jj<jdlast) :
+        print("DEBUG saving new jdlast.")
         try:
-          previousjd_object.value = jdlast
-          previousjd_object.save()
-          print("DEBUG-cpcs: saved ",jdlast)
+          pp.value = jdlast
+          pp.save()
         except:
-          print("FAILED save jdlastobs")
+          print("FAILED save jdlastobs (CPCS)")
 
