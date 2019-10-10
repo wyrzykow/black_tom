@@ -184,73 +184,76 @@ def target_post_save(target, created):
     br.select_form(nr=0)
     br.form['hashtag']=CPCS_DATA_ACCESS_HASHTAG
     br.submit()
-    page=br.open('http://gsaweb.ast.cam.ac.uk/followup/get_alert_lc_data?alert_name=ivo:%%2F%%2F%s'%nam)
-    pagetext=page.read()
-    data1=json.loads(pagetext)
-    if len(set(data1["filter"]) & set(['u','B','g','V','B2pg','r','R','R1pg','i','I','Ipg','z']))>0:
-        fup=[data1["mjd"],data1["mag"],data1["magerr"],data1["filter"],data1["observatory"]] 
-        logger.info('%s: follow-up data on CPCS found', target)
-    else:
-        logger.info('DEBUG: no CPCS follow-up for %s', target)
-        pass
+
+    try:
+      page=br.open('http://gsaweb.ast.cam.ac.uk/followup/get_alert_lc_data?alert_name=ivo:%%2F%%2F%s'%nam)
+      pagetext=page.read()
+      data1=json.loads(pagetext)
+      if len(set(data1["filter"]) & set(['u','B','g','V','B2pg','r','R','R1pg','i','I','Ipg','z']))>0:
+          fup=[data1["mjd"],data1["mag"],data1["magerr"],data1["filter"],data1["observatory"]] 
+          logger.info('%s: follow-up data on CPCS found', target)
+      else:
+          logger.info('DEBUG: no CPCS follow-up for %s', target)
+          pass
 
 
-    ## ascii for single filter:
-    datajson = data1
+      ## ascii for single filter:
+      datajson = data1
 
-    mjd0=np.array(datajson['mjd'])
-    mag0=np.array(datajson['mag'])
-    magerr0=np.array(datajson['magerr'])
-    filter0=np.array(datajson['filter'])
-    caliberr0=np.array(datajson['caliberr'])
-    obs0 = np.array(datajson['observatory'])
-    w=np.where((magerr0 != -1))
+      mjd0=np.array(datajson['mjd'])
+      mag0=np.array(datajson['mag'])
+      magerr0=np.array(datajson['magerr'])
+      filter0=np.array(datajson['filter'])
+      caliberr0=np.array(datajson['caliberr'])
+      obs0 = np.array(datajson['observatory'])
+      w=np.where((magerr0 != -1))
 
-    jd=mjd0[w]+2400000.5
-    mag=mag0[w]
-    magerr=np.sqrt(magerr0[w]*magerr0[w] + caliberr0[w]*caliberr0[w]) #adding calibration err in quad
-    filter=filter0[w]
-    obs=obs0[w]
+      jd=mjd0[w]+2400000.5
+      mag=mag0[w]
+      magerr=np.sqrt(magerr0[w]*magerr0[w] + caliberr0[w]*caliberr0[w]) #adding calibration err in quad
+      filter=filter0[w]
+      obs=obs0[w]
 
-    for i in reversed(range(len(mag))):
-        try:
-            datum_mag = float(mag[i])
-            datum_jd = Time(float(jd[i]), format='jd', scale='utc')
-            datum_f = filter[i]
-            datum_err = float(magerr[i])
-            value = {
-                'magnitude': datum_mag,
-                'filter': datum_f,
-                'error': datum_err
-            }
-            rd, created = ReducedDatum.objects.get_or_create(
-                timestamp=datum_jd.to_datetime(timezone=TimezoneInfo()),
-                value=json.dumps(value),
-                source_name=target.name,
-                source_location=page,
-                data_type='photometry',
-                target=target)
-            rd.save()
-        except:
-            pass
-    
-    #Updating the last observation JD
-    jdlast = np.max(jd)
+      for i in reversed(range(len(mag))):
+          try:
+              datum_mag = float(mag[i])
+              datum_jd = Time(float(jd[i]), format='jd', scale='utc')
+              datum_f = filter[i]
+              datum_err = float(magerr[i])
+              value = {
+                  'magnitude': datum_mag,
+                  'filter': datum_f,
+                  'error': datum_err
+              }
+              rd, created = ReducedDatum.objects.get_or_create(
+                  timestamp=datum_jd.to_datetime(timezone=TimezoneInfo()),
+                  value=json.dumps(value),
+                  source_name=target.name,
+                  source_location=page,
+                  data_type='photometry',
+                  target=target)
+              rd.save()
+          except:
+              pass
+      
+      #Updating the last observation JD
+      jdlast = np.max(jd)
 
-    #problems during Create - this object is empty...
-    previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')
+      #problems during Create - this object is empty...
+      previousjd_object = TargetExtra.objects.filter(target=target, key='jdlastobs')
 
-    #this is a list, with one element if ok
-    #FIXME: this works only for update, but not for creation
-    if (len(previousjd_object)>0):
-      pp = previousjd_object[0]
-      jj = float(pp.value)
-      print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
-      if (jj<jdlast) :
-        print("DEBUG saving new jdlast.")
-        try:
-          pp.value = jdlast
-          pp.save()
-        except:
-          print("FAILED save jdlastobs (CPCS)")
-
+      #this is a list, with one element if ok
+      #FIXME: this works only for update, but not for creation
+      if (len(previousjd_object)>0):
+        pp = previousjd_object[0]
+        jj = float(pp.value)
+        print("DEBUG-CPCS prev= ", jj, " new= ",jdlast)
+        if (jj<jdlast) :
+          print("DEBUG saving new jdlast.")
+          try:
+            pp.value = jdlast
+            pp.save()
+          except:
+            print("FAILED save jdlastobs (CPCS)")
+    except:
+      print("target ",cpcs_name, " not on CPCS")

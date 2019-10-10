@@ -351,7 +351,7 @@ TOM_FACILITY_CLASSES = [
     'black_tom.asvtelescope.ASVTelescope',
     'black_tom.opticonnetwork.OpticonNetwork',
     'black_tom.lcomultifilter.LCOMultiFilterFacility',
-#    'tom_lt.lt.LTFacility',
+    'tom_lt.lt.LTFacility',
     ]
 
 TOM_HARVESTER_CLASSES = [
