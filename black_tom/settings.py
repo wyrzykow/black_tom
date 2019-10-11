@@ -133,7 +133,9 @@ TEMPLATES = [
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 WSGI_APPLICATION = 'black_tom.wsgi.application'
-black_tom_DB_BACKEND = 'postgres'
+
+#black_tom_DB_BACKEND = 'postgres'
+black_tom_DB_BACKEND = 'local'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases

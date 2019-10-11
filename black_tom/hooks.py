@@ -3,21 +3,24 @@
 
 import logging
 from django.core.mail import send_mail
+import ccdphot
 
 logger = logging.getLogger(__name__)
 
 
 def observation_change_state(observation, previous_status):
     if observation.status == 'COMPLETED':
-        logger.info(
-            'Sending email, observation %s changed state from %s to %s',
-            observation, previous_status, observation.status
-        )
-        send_mail(
-            'Observation complete',
-            'The observation {} has completed'.format(observation),
-            'wyrzykow@gmail.com',
-            ['wyrzykow@gmail.com'],
-            fail_silently=False,
-        )
+        # logger.info(
+        #     'Sending email, observation %s changed state from %s to %s',
+        #     observation, previous_status, observation.status
+        # )
+        # send_mail(
+        #     'Observation complete',
+        #     'The observation {} has completed'.format(observation),
+        #     'wyrzykow@gmail.com',
+        #     ['wyrzykow@gmail.com'],
+        #     fail_silently=False,
+        # )
+        if ccphot.photometry_needed(observation):
+            ccphot.product_from_obs(observation)
 
