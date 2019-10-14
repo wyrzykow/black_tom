@@ -108,3 +108,6 @@ secret_stuff.txt
 black_tom/local_settings.py
 
 runtime.txt
+
+# PyCharm etc... IDE:
+.idea/
